@@ -4,15 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
 
-
-//TODO compat with archery expansion
-//TODO make skeleton use custom bow
-
-
-//TODO beforeShoot/afterShoot
-//TODO make special ammo/arrow(projectile)
-//TODO greater scoping
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(KJSCAuto.MODID)
 public class KJSCAuto

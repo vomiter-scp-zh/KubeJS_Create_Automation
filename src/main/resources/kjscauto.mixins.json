@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.vomiter.kjscauto.KJSCAutoMixinPlugin",
   "mixins": [
+    "BasinAccessor",
+    "BasinRecipeMixin",
     "BeltDeployerCallbacksMixin"
   ],
   "client": [

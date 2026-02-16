@@ -107,15 +107,4 @@ public class DeployerUseEventJS extends LevelEventJS {
     public ItemStack getRemainder() {
         return remainder;
     }
-
-    @HideFromJS
-    public void setOutputs(List<ItemStack> outputs) {
-        kjs$setOutputs(outputs);
-    }
-
-    @HideFromJS
-    public void setRemainder(ItemStack item){
-        remainder = item.copy();
-    }
-
 }
