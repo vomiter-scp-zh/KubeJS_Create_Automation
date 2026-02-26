@@ -73,6 +73,8 @@ public class BasinRecipeMixin {
 
                 if (KJSCAutoEvents.BASIN_OPERATION.hasListeners()) {
                     KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.SERVER, event);
+                    KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.CLIENT, event);
+
                 }
 
                 // 如果腳本取消：直接讓 apply 失敗

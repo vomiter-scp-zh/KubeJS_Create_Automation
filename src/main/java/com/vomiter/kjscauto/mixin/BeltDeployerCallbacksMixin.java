@@ -37,9 +37,6 @@ public class BeltDeployerCallbacksMixin {
                                    DeployerBlockEntity blockEntity, Recipe<?> recipe, CallbackInfo ci) {
         var eventJS = new DeployerUseEventJS(blockEntity, transported, handler, recipe);
         eventJSMap.put(key(blockEntity), eventJS);
-        if (KJSCAutoEvents.DEPLOYER_USE.hasListeners()) {
-            KJSCAutoEvents.DEPLOYER_USE.post(ScriptType.SERVER, eventJSMap.get(key(blockEntity)));
-        }
     }
 
     @WrapOperation(
@@ -74,6 +71,7 @@ public class BeltDeployerCallbacksMixin {
             // 3) 在這裡 post：此時 outputs/remainder 都已經寫進 event
             if (KJSCAutoEvents.DEPLOYER_USE.hasListeners()) {
                 KJSCAutoEvents.DEPLOYER_USE.post(ScriptType.SERVER, event);
+                KJSCAutoEvents.DEPLOYER_USE.post(ScriptType.CLIENT, event);
             }
 
             return event.getOutputs();

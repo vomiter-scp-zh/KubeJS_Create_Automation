@@ -7,7 +7,8 @@
   "mixins": [
     "BasinAccessor",
     "BasinRecipeMixin",
-    "BeltDeployerCallbacksMixin"
+    "BeltDeployerCallbacksMixin",
+    "BlockBreakingKineticBlockEntityMixin"
   ],
   "client": [
   ],
