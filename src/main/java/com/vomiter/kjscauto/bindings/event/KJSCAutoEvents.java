@@ -1,8 +1,6 @@
 package com.vomiter.kjscauto.bindings.event;
 
-import com.vomiter.kjscauto.machine.BasinOperationEventJS;
-import com.vomiter.kjscauto.machine.BlockDestroyEventJS;
-import com.vomiter.kjscauto.machine.DeployerUseEventJS;
+import com.vomiter.kjscauto.machine.*;
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
 

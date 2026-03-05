@@ -8,7 +8,9 @@
     "BasinAccessor",
     "BasinRecipeMixin",
     "BeltDeployerCallbacksMixin",
-    "BlockBreakingKineticBlockEntityMixin"
+    "BlockBreakingKineticBlockEntityMixin",
+    "BlockBreakingMovementBehaviourMixin",
+    "BlockHelper_DropsMixin"
   ],
   "client": [
   ],
