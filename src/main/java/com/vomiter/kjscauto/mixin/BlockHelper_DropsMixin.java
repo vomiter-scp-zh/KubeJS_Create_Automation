@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.vomiter.kjscauto.bindings.event.ContraptionEvents;
-import com.vomiter.kjscauto.machine.ContraptionBlockDestroyTLS;
+import com.vomiter.kjscauto.threadlocal.ContraptionBlockDestroyTLS;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -22,11 +22,12 @@ import java.util.List;
 public class BlockHelper_DropsMixin {
 
     @WrapOperation(
-      method = "destroyBlockAs(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;FLjava/util/function/Consumer;)V",
-      at = @At(
-        value="INVOKE",
-        target="Lnet/minecraft/world/level/block/Block;getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;"
-      )
+            method = "destroyBlockAs(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;FLjava/util/function/Consumer;)V",
+            at = @At(
+              value="INVOKE",
+              target="Lnet/minecraft/world/level/block/Block;getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;",
+              remap = true
+            )
     )
     private static List<ItemStack> kjscauto$overrideDrops(BlockState state, ServerLevel level, BlockPos pos,
                                                           @Nullable BlockEntity be, @Nullable Entity entity, ItemStack tool,

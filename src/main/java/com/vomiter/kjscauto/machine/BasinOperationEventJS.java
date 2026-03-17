@@ -1,47 +1,54 @@
 package com.vomiter.kjscauto.machine;
 
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.vomiter.kjscauto.mixin.BasinAccessor;
+import dev.latvian.mods.kubejs.core.LevelKJS;
 import dev.latvian.mods.kubejs.event.EventExit;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasinOperationEventJS extends LevelEventJS {
+public class BasinOperationEventJS implements KubeLevelEvent {
     private final BasinBlockEntity basin;
     private final Level level;
     private final BlockPos pos;
     private final Recipe<?> recipe;
     private final HeatLevel heatLevel;
+    private final ResourceLocation recipeId;
+
 
     private List<ItemStack> outputs = List.of();
     private List<FluidStack> fluidOutputs = List.of();
 
     private boolean cancelled;
-    private BlockContainerJS block;
+    private LevelBlock block;
 
     private final List<ItemStack> inputToInsert = new ArrayList<>();
     private final List<FluidStack> fluidToInsert = new ArrayList<>();
 
-    public BasinOperationEventJS(BasinBlockEntity basin, Recipe<?> recipe) {
+    public BasinOperationEventJS(BasinBlockEntity basin, Recipe<?> recipe, ResourceLocation recipeId) {
         this.basin = basin;
         this.level = basin.getLevel();
         this.pos = basin.getBlockPos();
         this.recipe = recipe;
+        this.recipeId = recipeId;
         this.heatLevel = ((BasinAccessor)basin).getHeatLevel();
-        basin.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
     }
 
     @Override
@@ -50,8 +57,8 @@ public class BasinOperationEventJS extends LevelEventJS {
     }
 
     @Info("The basin block container.")
-    public BlockContainerJS getBlock() {
-        if (block == null) block = new BlockContainerJS(getLevel(), pos);
+    public LevelBlock getBlock() {
+        if (block == null) block = ((LevelKJS)level).kjs$getBlock(pos);
         return block;
     }
 
@@ -100,9 +107,9 @@ public class BasinOperationEventJS extends LevelEventJS {
     }
 
     @Override
-    public Object cancel() throws EventExit {
+    public Object cancel(Context cx) throws EventExit {
         cancelled = true;
-        return super.cancel();
+        return KubeLevelEvent.super.cancel(cx);
     }
 
     @HideFromJS
@@ -118,6 +125,10 @@ public class BasinOperationEventJS extends LevelEventJS {
     public void addInputFluid(FluidStack fluid) {
         if (fluid == null || fluid.isEmpty()) return;
         fluidToInsert.add(fluid.copy());
+    }
+
+    public ResourceLocation getRecipeId(){
+        return recipeId;
     }
 
     @HideFromJS

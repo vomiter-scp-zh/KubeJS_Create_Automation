@@ -3,14 +3,13 @@ package com.vomiter.kjscauto.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.simibubi.create.content.kinetics.base.BlockBreakingMovementBehaviour;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import com.simibubi.create.content.kinetics.base.BlockBreakingMovementBehaviour;
 import com.vomiter.kjscauto.bindings.event.ContraptionEvents;
-import com.vomiter.kjscauto.bindings.event.KJSCAutoEvents;
 import com.vomiter.kjscauto.machine.ContraptionAfterBlockDestroyEventJS;
 import com.vomiter.kjscauto.machine.ContraptionBeforeBlockDestroyEventJS;
-import com.vomiter.kjscauto.machine.ContraptionBlockDestroyTLS;
+import com.vomiter.kjscauto.threadlocal.ContraptionBlockDestroyTLS;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.RemapPrefixForJS;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -54,7 +53,7 @@ public class BlockBreakingMovementBehaviourMixin {
         CompoundTag data = context.data;
         if (data == null || !data.contains("BreakingPos")) return;
 
-        BlockPos breakingPos = NbtUtils.readBlockPos(data.getCompound("BreakingPos"));
+        BlockPos breakingPos = NbtUtils.readBlockPos(data, "BreakingPos").orElseThrow();
         BlockState stateToBreak = world.getBlockState(breakingPos);
         float hardness = stateToBreak.getDestroySpeed(world, breakingPos);
 
