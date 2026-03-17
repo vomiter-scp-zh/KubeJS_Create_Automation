@@ -3,6 +3,7 @@ package com.vomiter.kjscauto.machine;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import dev.latvian.mods.kubejs.event.EventExit;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +34,8 @@ public class ContraptionAfterBlockDestroyEventJS extends ContraptionBeforeBlockD
 
     @Info("This event is not cancellable. You could clear the drop list instead. Or use the 'before' version of this event.")
     @Override
-    public Object cancel() throws EventExit {
-        return super.cancel();
+    public Object cancel(Context context) throws EventExit {
+        return super.cancel(context);
     }
 
 }

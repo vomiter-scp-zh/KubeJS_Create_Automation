@@ -3,12 +3,13 @@ package com.vomiter.kjscauto;
 import com.mojang.logging.LogUtils;
 import com.vomiter.kjscauto.bindings.event.ContraptionEvents;
 import com.vomiter.kjscauto.bindings.event.KJSCAutoEvents;
-import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.event.EventGroup;
+import dev.latvian.mods.kubejs.event.EventGroupRegistry;
+import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import org.slf4j.Logger;
 
 
-public class KJSCAutoPlugin extends KubeJSPlugin{
+public class KJSCAutoPlugin implements KubeJSPlugin {
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -17,9 +18,9 @@ public class KJSCAutoPlugin extends KubeJSPlugin{
     }
 
     @Override
-    public void registerEvents() {
-        ContraptionEvents.GROUP.register();
-        KJSCAutoEvents.GROUP.register();
+    public void registerEvents(EventGroupRegistry registry) {
+        registry.register(ContraptionEvents.GROUP);
+        registry.register(KJSCAutoEvents.GROUP);
     }
 
 }

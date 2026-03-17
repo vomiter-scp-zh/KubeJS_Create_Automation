@@ -3,8 +3,9 @@ package com.vomiter.kjscauto.machine;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.core.LevelKJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeployerUseEventJS extends LevelEventJS {
+public class DeployerUseEventJS implements KubeLevelEvent {
     private final Level level;
     private final BlockPos pos;
     private final DeployerBlockEntity blockEntity;
@@ -30,7 +31,7 @@ public class DeployerUseEventJS extends LevelEventJS {
     private int damage;
     private boolean cancelDamage;
 
-    private BlockContainerJS block;
+    private LevelBlock block;
 
     public DeployerUseEventJS(
             DeployerBlockEntity blockEntity,
@@ -63,9 +64,9 @@ public class DeployerUseEventJS extends LevelEventJS {
         return cancelDamage;
     }
 
-    public BlockContainerJS getBlock() {
+    public LevelBlock getBlock() {
         if (block == null) {
-            block = new BlockContainerJS(getLevel(), pos);
+            block = ((LevelKJS)getLevel()).kjs$getBlock(pos);
         }
         return block;
     }

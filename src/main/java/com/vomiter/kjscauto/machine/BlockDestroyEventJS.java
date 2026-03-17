@@ -1,16 +1,18 @@
 package com.vomiter.kjscauto.machine;
 
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
+import dev.latvian.mods.kubejs.core.LevelKJS;
 import dev.latvian.mods.kubejs.event.EventExit;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockDestroyEventJS extends LevelEventJS {
+public class BlockDestroyEventJS implements KubeLevelEvent {
 
     private final Level level;
     private final BlockBreakingKineticBlockEntity breaker;
@@ -22,8 +24,8 @@ public class BlockDestroyEventJS extends LevelEventJS {
     private final float hardness;
 
     private boolean cancelled;
-    private BlockContainerJS targetBlock;
-    private BlockContainerJS block;
+    private LevelBlock targetBlock;
+    private LevelBlock block;
 
     public BlockDestroyEventJS(Level level,
                                BlockBreakingKineticBlockEntity breaker,
@@ -52,8 +54,8 @@ public class BlockDestroyEventJS extends LevelEventJS {
     }
 
     @Info("The drill/saw block.")
-    public BlockContainerJS getBlock(){
-        if (block == null) block = new BlockContainerJS(getLevel(), breaker.getBlockPos());
+    public LevelBlock getBlock(){
+        if (block == null) block = ((LevelKJS)getLevel()).kjs$getBlock(breaker.getBlockPos());
         return block;
     }
 
@@ -68,8 +70,8 @@ public class BlockDestroyEventJS extends LevelEventJS {
     }
 
     @Info("The target block to be destroyed")
-    public BlockContainerJS getTargetBlock() {
-        if (targetBlock == null) targetBlock = new BlockContainerJS(getLevel(), targetPos);
+    public LevelBlock getTargetBlock() {
+        if (targetBlock == null) targetBlock = ((LevelKJS)getLevel()).kjs$getBlock(targetPos);
         return targetBlock;
     }
 
@@ -89,9 +91,9 @@ public class BlockDestroyEventJS extends LevelEventJS {
     }
 
     @Override
-    public Object cancel() throws EventExit {
+    public Object cancel(Context cx) throws EventExit {
         cancelled = true;
-        return super.cancel();
+        return KubeLevelEvent.super.cancel(cx);
     }
 
     @HideFromJS

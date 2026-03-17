@@ -6,11 +6,13 @@
   "plugin": "com.vomiter.kjscauto.KJSCAutoMixinPlugin",
   "mixins": [
     "BasinAccessor",
+    "BasinOperatingBlockEntityMixin",
     "BasinRecipeMixin",
     "BeltDeployerCallbacksMixin",
     "BlockBreakingKineticBlockEntityMixin",
     "BlockBreakingMovementBehaviourMixin",
-    "BlockHelper_DropsMixin"
+    "BlockHelper_DropsMixin",
+    "RecipeTrieFinderMixin"
   ],
   "client": [
   ],

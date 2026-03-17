@@ -2,16 +2,18 @@ package com.vomiter.kjscauto.machine;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
+import dev.latvian.mods.kubejs.core.LevelKJS;
 import dev.latvian.mods.kubejs.event.EventExit;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ContraptionBeforeBlockDestroyEventJS extends LevelEventJS {
+public class ContraptionBeforeBlockDestroyEventJS implements KubeLevelEvent {
 
     final Level level;
     final AbstractContraptionEntity contraptionEntity;
@@ -24,7 +26,7 @@ public class ContraptionBeforeBlockDestroyEventJS extends LevelEventJS {
     final float hardness;         // stateToBreak.getDestroySpeed(...)
 
     private boolean cancelled;
-    BlockContainerJS targetBlock;
+    LevelBlock targetBlock;
 
     public ContraptionBeforeBlockDestroyEventJS(Level level,
                                                 AbstractContraptionEntity contraptionEntity,
@@ -71,8 +73,8 @@ public class ContraptionBeforeBlockDestroyEventJS extends LevelEventJS {
     }
 
     @Info("The target block to be destroyed.")
-    public BlockContainerJS getTargetBlock() {
-        if (targetBlock == null) targetBlock = new BlockContainerJS(getLevel(), targetPos);
+    public LevelBlock getTargetBlock() {
+        if (targetBlock == null) targetBlock = ((LevelKJS)getLevel()).kjs$getBlock(targetPos);
         return targetBlock;
     }
 
@@ -93,9 +95,9 @@ public class ContraptionBeforeBlockDestroyEventJS extends LevelEventJS {
 
     @Info("If canceled, the target block will not be destroyed.")
     @Override
-    public Object cancel() throws EventExit {
+    public Object cancel(Context context) throws EventExit {
         cancelled = true;
-        return super.cancel();
+        return KubeLevelEvent.super.cancel(context);
     }
 
     @HideFromJS

@@ -1,4 +1,6 @@
-package com.vomiter.kjscauto.machine;
+package com.vomiter.kjscauto.threadlocal;
+
+import com.vomiter.kjscauto.machine.ContraptionAfterBlockDestroyEventJS;
 
 public final class ContraptionBlockDestroyTLS {
     private ContraptionBlockDestroyTLS() {}

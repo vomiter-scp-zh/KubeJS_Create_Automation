@@ -12,6 +12,7 @@ import com.vomiter.kjscauto.machine.DeployerUseEventJS;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.RemapPrefixForJS;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -83,22 +84,25 @@ public class BeltDeployerCallbacksMixin {
 
     @WrapOperation(
             method = "activate",
-            at = @At(value="INVOKE", target="Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V")
+            at = @At(value="INVOKE", target="Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V", remap = true)
     )
     private static void deployerHurtAndBreak(
-            ItemStack instance, int damage, LivingEntity entity, Consumer<LivingEntity> consumer,
+            ItemStack instance,
+            int damage,
+            LivingEntity entity,
+            EquipmentSlot slot,
             Operation<Void> original,
             @Local(argsOnly = true, name = "arg2") DeployerBlockEntity deployer
     ) {
         var event = eventJSMap.get(key(deployer));
         if (event == null) {
-            original.call(instance, damage, entity, consumer);
+            original.call(instance, damage, entity, slot);
             return;
         }
         int finalDamage = event.kjs$isDamageCancelled() ? 0 : event.getDamage();
 
         if (finalDamage > 0) {
-            original.call(instance, finalDamage, entity, consumer);
+            original.call(instance, finalDamage, entity, slot);
         } else {
             // 取消扣耐久：不 call original
         }
