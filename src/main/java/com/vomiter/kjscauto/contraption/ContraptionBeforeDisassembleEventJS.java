@@ -6,9 +6,10 @@ import com.simibubi.create.content.contraptions.StructureTransform;
 import com.vomiter.kjscauto.mixin.ContraptionAccessor;
 import dev.latvian.mods.kubejs.core.LevelKJS;
 import dev.latvian.mods.kubejs.event.EventExit;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class ContraptionBeforeDisassembleEventJS extends LevelEventJS {
+public class ContraptionBeforeDisassembleEventJS implements KubeLevelEvent {
 
     final Level level;
     final AbstractContraptionEntity contraptionEntity;
@@ -29,7 +30,7 @@ public class ContraptionBeforeDisassembleEventJS extends LevelEventJS {
 
     private boolean cancelled;
     private List<BlockPos> targetPositions;
-    private List<BlockContainerJS> targetBlocks;
+    private List<LevelBlock> targetBlocks;
 
     public ContraptionBeforeDisassembleEventJS(Level level,
                                                AbstractContraptionEntity contraptionEntity,
@@ -89,18 +90,18 @@ public class ContraptionBeforeDisassembleEventJS extends LevelEventJS {
     }
 
     @Info("All world blocks at target positions this contraption will try to place into during disassembly.")
-    public List<BlockContainerJS> getTargetBlocks() {
+    public List<LevelBlock> getTargetBlocks() {
         if (targetBlocks == null) {
             targetBlocks = new ArrayList<>();
             for (BlockPos pos : getTargetPositions()) {
-                targetBlocks.add(new BlockContainerJS(level, pos));
+                targetBlocks.add(((LevelKJS)getLevel()).kjs$getBlock(pos));
             }
         }
 
         return targetBlocks;
     }
 
-    public boolean testTargetBlock(Predicate<BlockContainerJS> predicate) {
+    public boolean testTargetBlock(Predicate<LevelBlock> predicate) {
         for (BlockPos pos : getTargetPositions()) {
             var block = ((LevelKJS)level).kjs$getBlock(pos);
             if(predicate.test(block)) return true;
@@ -110,9 +111,9 @@ public class ContraptionBeforeDisassembleEventJS extends LevelEventJS {
 
     @Info("If canceled, this contraption disassembly will not proceed.")
     @Override
-    public Object cancel() throws EventExit {
+    public Object cancel(Context context) throws EventExit {
         cancelled = true;
-        return super.cancel();
+        return KubeLevelEvent.super.cancel(context);
     }
 
     @HideFromJS
