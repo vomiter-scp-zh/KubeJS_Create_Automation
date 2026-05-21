@@ -202,7 +202,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 mixin{
-    add sourceSets.main, "rangedjs.mixins.refmap.json";
+    add sourceSets.main, "kjscauto.mixins.refmap.json";
     config "${mod_id}.mixins.json";
 
     debug.verbose = true
