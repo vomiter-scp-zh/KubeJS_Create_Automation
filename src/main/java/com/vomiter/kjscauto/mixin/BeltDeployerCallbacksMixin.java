@@ -83,7 +83,7 @@ public class BeltDeployerCallbacksMixin {
 
     @WrapOperation(
             method = "activate",
-            at = @At(value="INVOKE", target="Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V")
+            at = @At(value="INVOKE", target="Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V", remap = true)
     )
     private static void deployerHurtAndBreak(
             ItemStack instance, int damage, LivingEntity entity, Consumer<LivingEntity> consumer,

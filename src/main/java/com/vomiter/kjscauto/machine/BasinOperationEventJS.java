@@ -40,7 +40,7 @@ public class BasinOperationEventJS extends LevelEventJS {
         this.level = basin.getLevel();
         this.pos = basin.getBlockPos();
         this.recipe = recipe;
-        this.heatLevel = ((BasinAccessor)basin).getHeatLevel();
+        this.heatLevel = ((BasinAccessor)basin).kjscauto$getHeatLevel();
         basin.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
     }
 

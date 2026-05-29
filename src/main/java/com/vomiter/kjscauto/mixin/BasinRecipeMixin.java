@@ -73,7 +73,7 @@ public class BasinRecipeMixin {
 
                 if (KJSCAutoEvents.BASIN_OPERATION.hasListeners()) {
                     KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.SERVER, event);
-                    KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.CLIENT, event);
+                    //KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.CLIENT, event);
 
                 }
 
@@ -82,8 +82,8 @@ public class BasinRecipeMixin {
                     return false;
                 }
 
-                // 把腳本修改後的 outputs 寫回 Create 原本的 list 物件（很重要）
-                // 這樣後續 simulate==false 的那輪會沿用改過的結果
+                // 腳本修改後的 outputs 寫回 Create 原本的 list 物件
+                // 後續 simulate==false 的那輪會沿用改過的結果
                 recipeOutputItems.clear();
                 recipeOutputItems.addAll(event.getOutputs());
 
@@ -101,10 +101,8 @@ public class BasinRecipeMixin {
                 var inputInv = basin.getInputInventory(); // SmartInventory
                 for (ItemStack toInsert : event.kjs$getInputToInsert()) {
                     if (toInsert.isEmpty()) continue;
-                    // 盡量用 insert helper，避免你自己算 slot
                     ItemStack remainder = ItemHandlerHelper.insertItemStacked(inputInv, toInsert.copy(), false);
-                    // 如果你需要處理塞不進去的 remainder：可以丟到 output 或掉落
-                    // 這裡先保守：塞不進就丟在盆上方
+                    //塞不進就丟在盆上方
                     if (!remainder.isEmpty()) {
                         assert basin.getLevel() != null;
                         Block.popResource(basin.getLevel(), basin.getBlockPos().above(), remainder);
