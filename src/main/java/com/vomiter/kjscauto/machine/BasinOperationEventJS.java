@@ -48,7 +48,7 @@ public class BasinOperationEventJS implements KubeLevelEvent {
         this.pos = basin.getBlockPos();
         this.recipe = recipe;
         this.recipeId = recipeId;
-        this.heatLevel = ((BasinAccessor)basin).getHeatLevel();
+        this.heatLevel = ((BasinAccessor)basin).kjscauto$getHeatLevel();
     }
 
     @Override
