@@ -8,7 +8,7 @@ public interface KJSCAutoEvents {
 
     EventGroup GROUP = EventGroup.of("KJSCAutoEvents");
     EventHandler DEPLOYER_USE = GROUP.common("deployerUse", () -> DeployerUseEventJS.class);
-    EventHandler ARM_COLLECT = GROUP.common("armCollect", () -> MechanicalArmCollectEventJS.class);
+    EventHandler ARM_COLLECT = GROUP.common("armCollect", () -> MechanicalArmInteractionEventJS.class);
     EventHandler ARM_DEPOSIT = GROUP.common("armDeposit", () -> MechanicalArmDepositEventJS.class);
     EventHandler BASIN_OPERATION = GROUP.common("basinOperation", () -> BasinOperationEventJS.class).hasResult();
     EventHandler BLOCK_DESTROY = GROUP.common("blockDestroy", () -> BlockDestroyEventJS.class).hasResult();
