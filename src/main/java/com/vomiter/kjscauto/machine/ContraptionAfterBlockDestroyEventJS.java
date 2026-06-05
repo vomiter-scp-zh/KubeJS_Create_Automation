@@ -31,7 +31,7 @@ public class ContraptionAfterBlockDestroyEventJS extends ContraptionBeforeBlockD
         this.drops = copied;
     }
 
-    @Info("This event is not cancellable. You could clear the drop list instead. Or use the 'before' version of this event.")
+    @Info("This target is not cancellable. You could clear the drop list instead. Or use the 'before' version of this target.")
     @Override
     public Object cancel() throws EventExit {
         return super.cancel();

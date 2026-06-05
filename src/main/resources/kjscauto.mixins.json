@@ -13,7 +13,8 @@
     "BlockBreakingKineticBlockEntityMixin",
     "BlockBreakingMovementBehaviourMixin",
     "BlockHelper_DropsMixin",
-    "ContraptionAccessor"
+    "ContraptionAccessor",
+    "ArmBlockEntityMixin"
   ],
   "client": [
   ],

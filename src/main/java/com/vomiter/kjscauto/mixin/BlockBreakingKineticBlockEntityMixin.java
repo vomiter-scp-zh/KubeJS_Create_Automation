@@ -44,7 +44,7 @@ public abstract class BlockBreakingKineticBlockEntityMixin  extends KineticBlock
         BlockBreakingKineticBlockEntity self = (BlockBreakingKineticBlockEntity) (Object) this;
         if (self.getLevel() == null || self.getLevel().isClientSide()) return;
 
-        // 建立並廣播 KJS event
+        // 建立並廣播 KJS target
         var event = new BlockDestroyEventJS(self.getLevel(), self, breakingPos, stateToBreak, breakSpeed, blockHardness, blockHardness);
         if(KJSCAutoEvents.BLOCK_DESTROY.hasListeners()){
             KJSCAutoEvents.BLOCK_DESTROY.post(ScriptType.SERVER, event);

@@ -23,21 +23,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@RemapPrefixForJS("kjs$")
 @Mixin(value = BasinRecipe.class, remap = false)
 public class BasinRecipeMixin {
     @Unique private static final ThreadLocal<BasinOperationEventJS> kjs$eventTL = new ThreadLocal<>();
 
     @Inject(method = "apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
             at = @At("HEAD"))
-    private static void kjs$createEvent(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir) {
+    private static void kjscauto$createEvent(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir) {
         if (test) return;
         kjs$eventTL.set(new BasinOperationEventJS(basin, recipe));
     }
 
     @Inject(method = "apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
             at = @At("RETURN"))
-    private static void kjs$clearEvent(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir) {
+    private static void kjscauto$clearEvent(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir) {
         if (test) return;
         kjs$eventTL.remove();
     }
@@ -49,7 +48,7 @@ public class BasinRecipeMixin {
                     target = "Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;acceptOutputs(Ljava/util/List;Ljava/util/List;Z)Z"
             )
     )
-    private static boolean kjs$onAcceptOutputs(
+    private static boolean kjscauto$onAcceptOutputs(
             BasinBlockEntity basin,
             List<ItemStack> recipeOutputItems,
             List<FluidStack> recipeOutputFluids,
@@ -67,13 +66,13 @@ public class BasinRecipeMixin {
         if (simulate) {
             var event = kjs$eventTL.get();
             if (event != null) {
-                // 把 Create 算出的 outputs 塞進 event（copy）
+                // 把 Create 算出的 outputs 塞進 target（copy）
                 event.kjs$setOutputs(recipeOutputItems);
                 event.kjs$setFluidOutputs(recipeOutputFluids);
 
                 if (KJSCAutoEvents.BASIN_OPERATION.hasListeners()) {
                     KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.SERVER, event);
-                    //KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.CLIENT, event);
+                    //KJSCAutoEvents.BASIN_OPERATION.post(ScriptType.CLIENT, target);
 
                 }
 

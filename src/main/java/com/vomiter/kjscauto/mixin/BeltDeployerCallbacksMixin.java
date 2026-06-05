@@ -10,7 +10,6 @@ import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
 import com.vomiter.kjscauto.bindings.event.KJSCAutoEvents;
 import com.vomiter.kjscauto.machine.DeployerUseEventJS;
 import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.rhino.util.RemapPrefixForJS;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -25,18 +24,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 import java.util.function.Consumer;
 
-@RemapPrefixForJS("kjs$")
-
 @Mixin(value = BeltDeployerCallbacks.class, remap = false)
 public class BeltDeployerCallbacksMixin {
     @Unique private static final Long2ObjectOpenHashMap<DeployerUseEventJS> eventJSMap = new Long2ObjectOpenHashMap<>();
-    @Unique private static long key(DeployerBlockEntity be) { return be.getBlockPos().asLong(); }
+    @Unique private static long kjscauto$key(DeployerBlockEntity be) { return be.getBlockPos().asLong(); }
 
     @Inject(method = "activate", at = @At("HEAD"))
-    private static void addEventJS(TransportedItemStack transported, TransportedItemStackHandlerBehaviour handler,
+    private static void kjscauto$addEventJS(TransportedItemStack transported, TransportedItemStackHandlerBehaviour handler,
                                    DeployerBlockEntity blockEntity, Recipe<?> recipe, CallbackInfo ci) {
         var eventJS = new DeployerUseEventJS(blockEntity, transported, handler, recipe);
-        eventJSMap.put(key(blockEntity), eventJS);
+        eventJSMap.put(kjscauto$key(blockEntity), eventJS);
     }
 
     @WrapOperation(
@@ -46,7 +43,7 @@ public class BeltDeployerCallbacksMixin {
                     target = "Lcom/simibubi/create/foundation/recipe/RecipeApplier;applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;Z)Ljava/util/List;"
             )
     )
-    private static java.util.List<ItemStack> kjs$captureRecipeOutputs(
+    private static List<ItemStack> kjscauto$captureRecipeOutputs(
             Level level,
             ItemStack input,
             Recipe<?> recipe,
@@ -59,8 +56,8 @@ public class BeltDeployerCallbacksMixin {
         // 1) 先讓 Create 正常算出 outputs（ItemStack list）
         List<ItemStack> outputs = original.call(level, input, recipe, returnProcessingRemainder);
 
-        // 2) 找到本次 activate 的 event
-        var event = eventJSMap.get(key(deployer));
+        // 2) 找到本次 activate 的 target
+        var event = eventJSMap.get(kjscauto$key(deployer));
         if (event != null) {
             ItemStack remainder = transported.stack.copy();
             remainder.shrink(1);
@@ -68,7 +65,7 @@ public class BeltDeployerCallbacksMixin {
             event.kjs$setRemainder(remainder);
             event.kjs$setOutputs(outputs);
 
-            // 3) 在這裡 post：此時 outputs/remainder 都已經寫進 event
+            // 3) 在這裡 post：此時 outputs/remainder 都已經寫進 target
             if (KJSCAutoEvents.DEPLOYER_USE.hasListeners()) {
                 KJSCAutoEvents.DEPLOYER_USE.post(ScriptType.SERVER, event);
                 KJSCAutoEvents.DEPLOYER_USE.post(ScriptType.CLIENT, event);
@@ -85,12 +82,12 @@ public class BeltDeployerCallbacksMixin {
             method = "activate",
             at = @At(value="INVOKE", target="Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V", remap = true)
     )
-    private static void deployerHurtAndBreak(
+    private static void kjscauto$deployerHurtAndBreak(
             ItemStack instance, int damage, LivingEntity entity, Consumer<LivingEntity> consumer,
             Operation<Void> original,
             @Local(argsOnly = true, name = "arg2") DeployerBlockEntity deployer
     ) {
-        var event = eventJSMap.get(key(deployer));
+        var event = eventJSMap.get(kjscauto$key(deployer));
         if (event == null) {
             original.call(instance, damage, entity, consumer);
             return;
@@ -105,8 +102,8 @@ public class BeltDeployerCallbacksMixin {
     }
 
     @Inject(method = "activate", at = @At("RETURN"))
-    private static void removeEventJS(TransportedItemStack transported, TransportedItemStackHandlerBehaviour handler, DeployerBlockEntity blockEntity, Recipe<?> recipe, CallbackInfo ci){
-        eventJSMap.remove(key(blockEntity));
+    private static void kjscauto$removeEventJS(TransportedItemStack transported, TransportedItemStackHandlerBehaviour handler, DeployerBlockEntity blockEntity, Recipe<?> recipe, CallbackInfo ci){
+        eventJSMap.remove(kjscauto$key(blockEntity));
     }
 
 

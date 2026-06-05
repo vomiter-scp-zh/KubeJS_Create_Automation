@@ -20,7 +20,7 @@ public abstract class AbstractContraptionEntity_PrecheckDisassembleMixin {
     protected abstract StructureTransform makeStructureTransform();
 
     @Inject(method = "disassemble", at = @At("HEAD"), cancellable = true)
-    private void yourmod$precheckDisassemble(CallbackInfo ci) {
+    private void kjscauto$precheckDisassemble(CallbackInfo ci) {
         AbstractContraptionEntity self = (AbstractContraptionEntity) (Object) this;
 
         if (self.level().isClientSide()) {
