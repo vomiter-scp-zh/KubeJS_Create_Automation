@@ -6,21 +6,18 @@ import com.simibubi.create.content.contraptions.StructureTransform;
 import com.vomiter.kjscauto.bindings.event.ContraptionEvents;
 import com.vomiter.kjscauto.contraption.ContraptionBeforeDisassembleEventJS;
 import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.rhino.util.RemapPrefixForJS;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@RemapPrefixForJS("kjs$")
 @Mixin(value = AbstractContraptionEntity.class, remap = false)
 public abstract class AbstractContraptionEntityMixin {
 
-    @Shadow @Final
+    @Shadow
     protected Contraption contraption;
 
     @Shadow

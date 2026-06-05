@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Consumer;
 
-@RemapPrefixForJS("kjs$")
 @Mixin(value = BlockBreakingMovementBehaviour.class, remap = false)
 public class BlockBreakingMovementBehaviourMixin {
     @Unique
@@ -43,7 +42,7 @@ public class BlockBreakingMovementBehaviourMixin {
         ),
         cancellable = true
     )
-    private void kjs$beforeContraptionDestroy(MovementContext context, CallbackInfo ci) {
+    private void kjscauto$beforeContraptionDestroy(MovementContext context, CallbackInfo ci) {
         if (context == null) return;
         Level world = context.world;
         if (world == null || world.isClientSide) return;
