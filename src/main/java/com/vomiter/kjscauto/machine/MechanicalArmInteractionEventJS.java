@@ -2,15 +2,15 @@ package com.vomiter.kjscauto.machine;
 
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
-import dev.latvian.mods.kubejs.event.EventExit;
-import dev.latvian.mods.kubejs.level.BlockContainerJS;
-import dev.latvian.mods.kubejs.level.LevelEventJS;
+import dev.latvian.mods.kubejs.core.LevelKJS;
+import dev.latvian.mods.kubejs.level.KubeLevelEvent;
+import dev.latvian.mods.kubejs.level.LevelBlock;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class MechanicalArmInteractionEventJS extends LevelEventJS {
+public class MechanicalArmInteractionEventJS implements KubeLevelEvent {
     private final Level level;
     private final BlockPos pos;
     private final ArmBlockEntity arm;
@@ -18,8 +18,8 @@ public class MechanicalArmInteractionEventJS extends LevelEventJS {
     private final ItemStack heldItem;
     private final ArmInteractionPoint target;
     private final ItemStack itemToInteract;
-    private BlockContainerJS targetBlock;
-    private BlockContainerJS block;
+    private LevelBlock targetBlock;
+    private LevelBlock block;
     private boolean cancelled;
 
     public MechanicalArmInteractionEventJS(ArmBlockEntity armBlockEntity, ArmInteractionPoint interactionPoint, ItemStack itemStack, ItemStack itemToCollect){
@@ -54,16 +54,16 @@ public class MechanicalArmInteractionEventJS extends LevelEventJS {
         return heldItem;
     }
 
-    public BlockContainerJS getTargetBlock() {
+    public LevelBlock getTargetBlock() {
         if (targetBlock == null) {
-            targetBlock = new BlockContainerJS(getLevel(), targetPos);
+            targetBlock = ((LevelKJS)getLevel()).kjs$getBlock(targetPos);
         }
         return targetBlock;
     }
 
-    public BlockContainerJS getBlock() {
+    public LevelBlock getBlock() {
         if (block == null) {
-            block = new BlockContainerJS(getLevel(), pos);
+            block = ((LevelKJS)getLevel()).kjs$getBlock(pos);
         }
         return block;
     }

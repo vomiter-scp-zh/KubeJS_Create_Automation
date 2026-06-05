@@ -28,7 +28,7 @@ public abstract class ArmBlockEntityMixin {
             int i,
             Operation<Integer> original
     ){
-        var itemToCollect = armInteractionPoint.extract(i, true);
+        var itemToCollect = armInteractionPoint.extract((ArmBlockEntity)(Object)this, i, true);
         var originalResult = original.call(instance, armInteractionPoint, i);
         if (originalResult != 0){ //0 means nothing to collect
             var event = new MechanicalArmCollectEventJS((ArmBlockEntity)(Object)this, armInteractionPoint, heldItem, itemToCollect.copy(), originalResult);
@@ -42,13 +42,10 @@ public abstract class ArmBlockEntityMixin {
         return originalResult;
     }
 
-    @WrapOperation(method = "depositItem", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint;" +
-            "insert" +
-            "(Lnet/minecraft/world/item/ItemStack;Z)" +
-            "Lnet/minecraft/world/item/ItemStack;")
+    @WrapOperation(method = "depositItem", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint;insert(Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmBlockEntity;Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;")
     )
     private ItemStack kjscauto$depositItem(
-            ArmInteractionPoint interactionPoint, ItemStack stack, boolean simulate, Operation<ItemStack> original){
+            ArmInteractionPoint interactionPoint, ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate, Operation<ItemStack> original){
         var originalResultSim = original.call(interactionPoint, stack, true);
         if (originalResultSim.getCount() != stack.getCount()){ // count change means something is inserted in the sim
             var event = new MechanicalArmDepositEventJS((ArmBlockEntity)(Object)this, interactionPoint, heldItem, stack.copy(), originalResultSim);
@@ -57,10 +54,10 @@ public abstract class ArmBlockEntityMixin {
                 KJSCAutoEvents.ARM_DEPOSIT.post(ScriptType.CLIENT, event);
             }
             if(event.kjs$isCancelled()) return event.getItemToInteract();
-            original.call(interactionPoint, event.getItemToInteract(), false);
+            original.call(interactionPoint, (ArmBlockEntity)(Object)this, event.getItemToInteract(), false);
             return event.getRemainder();
         }
-        return original.call(interactionPoint, stack, simulate);
+        return original.call(interactionPoint, (ArmBlockEntity)(Object)this, stack, simulate);
     }
 
 }
