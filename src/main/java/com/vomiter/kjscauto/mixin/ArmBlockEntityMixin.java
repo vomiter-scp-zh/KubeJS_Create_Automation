@@ -46,7 +46,7 @@ public abstract class ArmBlockEntityMixin {
     )
     private ItemStack kjscauto$depositItem(
             ArmInteractionPoint interactionPoint, ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate, Operation<ItemStack> original){
-        var originalResultSim = original.call(interactionPoint, stack, true);
+        var originalResultSim = original.call(interactionPoint, armBlockEntity, stack, true);
         if (originalResultSim.getCount() != stack.getCount()){ // count change means something is inserted in the sim
             var event = new MechanicalArmDepositEventJS((ArmBlockEntity)(Object)this, interactionPoint, heldItem, stack.copy(), originalResultSim);
             if (KJSCAutoEvents.ARM_DEPOSIT.hasListeners()) {

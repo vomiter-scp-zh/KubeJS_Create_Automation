@@ -7,6 +7,8 @@
   "mixins": [
     "AbstractContraptionEntity_PrecheckDisassembleMixin",
     "AbstractContraptionEntityMixin",
+    "AllFanProcessingTypesMixin",
+    "ArmBlockEntityMixin",
     "BasinAccessor",
     "BasinOperatingBlockEntityMixin",
     "BasinRecipeMixin",

@@ -5,7 +5,7 @@ import com.vomiter.kjscauto.machine.ContraptionAfterBlockDestroyEventJS;
 public final class ContraptionBlockDestroyTLS {
     private ContraptionBlockDestroyTLS() {}
 
-    public static final ThreadLocal<Entry> TL = new ThreadLocal<>();
+    static final ThreadLocal<Entry> TL = new ThreadLocal<>();
 
     public static final class Entry {
         public final ContraptionAfterBlockDestroyEventJS event;
