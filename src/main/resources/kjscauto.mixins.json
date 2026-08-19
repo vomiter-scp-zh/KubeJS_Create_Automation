@@ -7,14 +7,15 @@
   "mixins": [
     "AbstractContraptionEntity_PrecheckDisassembleMixin",
     "AbstractContraptionEntityMixin",
+    "AllFanProcessingTypesMixin",
+    "ArmBlockEntityMixin",
     "BasinAccessor",
     "BasinRecipeMixin",
     "BeltDeployerCallbacksMixin",
     "BlockBreakingKineticBlockEntityMixin",
     "BlockBreakingMovementBehaviourMixin",
     "BlockHelper_DropsMixin",
-    "ContraptionAccessor",
-    "ArmBlockEntityMixin"
+    "ContraptionAccessor"
   ],
   "client": [
   ],
